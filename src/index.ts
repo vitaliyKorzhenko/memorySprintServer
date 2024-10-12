@@ -1,12 +1,31 @@
 // src/server.ts
 import express from 'express';
 import { getUsers } from './controllers/userController';
+import levelsRoutes from './routes/levelsRoutes';
+import insertLevels from './db/levelsSeed';
+import seedUsers from './db/userSeed';
+import userRoutes from './routes/userRoutes'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.get('/users', getUsers);  
+// Middleware
+app.use(express.json()); // Parse JSON request bodies
 
-app.listen(PORT, () => {
-  console.log(`Сервер запущен на порту ${PORT}`);
+// Connect the routes
+app.use('/api', levelsRoutes); // Add API prefix for routes
+
+app.use('/api', userRoutes); //add APi user  
+
+
+//one try
+const insertInitialData = async () => {
+   await seedUsers();
+   await insertLevels();
+  };
+
+app.listen(PORT, async () => {
+  console.log(`Server started on  ${PORT}`);
+
+    // await insertInitialData();
 });
