@@ -26,9 +26,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/config/db.ts
 const pg_1 = require("pg");
 const dotenv = __importStar(require("dotenv"));
+//only for test DB! and vercel deploy!!
+const DATABASE_URL = 'postgresql://postgres.drjlsmyxjxwazfvyglxm:vitaliy1703AA@aws-0-eu-central-1.pooler.supabase.com:6543/postgres';
 dotenv.config();
 const pool = new pg_1.Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: DATABASE_URL,
     ssl: {
         rejectUnauthorized: false,
     },
