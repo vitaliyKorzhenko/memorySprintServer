@@ -27,6 +27,7 @@ npm install
 # create .env (locally)
 DATABASE_URL=postgresql://postgres.drjlsmyxjxwazfvyglxm:password(askVitaliy)@aws-0-eu-central-1.pooler.supabase.com:6543/postgres
 
-
+# db interface
+https://supabase.com/dashboard/project/drjlsmyxjxwazfvyglxm/editor/29212?schema=public
 
 
