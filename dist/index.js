@@ -18,8 +18,10 @@ const levelsRoutes_1 = __importDefault(require("./routes/levelsRoutes"));
 const levelsSeed_1 = __importDefault(require("./db/levelsSeed"));
 const userSeed_1 = __importDefault(require("./db/userSeed"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const apiMiddleware_1 = __importDefault(require("./apiMiddleware"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
+app.use('/api', apiMiddleware_1.default); // Проверка API-ключа для всех маршрутов под /api
 // Middleware
 app.use(express_1.default.json()); // Parse JSON request bodies
 // Connect the routes
