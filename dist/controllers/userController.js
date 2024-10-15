@@ -82,7 +82,12 @@ const enableUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.enableUser = enableUser;
 //get user info by email
 const findUserByEmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email } = req.params;
+    console.log(' req.body', req.body);
+    if (!req.body.email) {
+        res.status(400).json({ message: 'email is required' });
+        return;
+    }
+    const { email } = req.body;
     try {
         const result = yield db_1.default.query(`SELECT * FROM users WHERE email = $1`, [email]);
         if (result.rows.length > 0) {

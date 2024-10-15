@@ -80,7 +80,12 @@ export const enableUser = async (req: Request, res: Response): Promise<void> => 
 //get user info by email
 
 export const findUserByEmail = async (req: Request, res: Response): Promise<void> => {
-  const { email } = req.params;
+  console.log(' req.body', req.body)
+  if (!req.body.email) {
+    res.status(400).json({ message: 'email is required' });
+    return;
+  }
+  const { email } =  req.body;
   try {
     const result = await pool.query(
       `SELECT * FROM users WHERE email = $1`,
