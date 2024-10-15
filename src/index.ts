@@ -5,9 +5,16 @@ import levelsRoutes from './routes/levelsRoutes';
 import insertLevels from './db/levelsSeed';
 import seedUsers from './db/userSeed';
 import userRoutes from './routes/userRoutes'
+import apiKeyMiddleware from './apiMiddleware';
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+
+app.use('/api', apiKeyMiddleware); // Проверка API-ключа для всех маршрутов под /api
+
+
 
 // Middleware
 app.use(express.json()); // Parse JSON request bodies
