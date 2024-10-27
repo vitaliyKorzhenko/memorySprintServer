@@ -33,6 +33,8 @@ export const getLevelById = async (req: Request, res: Response) => {
 
 //progress section 
 
+
+
 // Get all level progresses
 export const findAllLevelProgresses = async (req: Request, res: Response) => {
   try {
@@ -170,3 +172,41 @@ export const findProgressByUserId = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+// Get user information and progress history by email and ageType
+
+
+
+//find user info
+
+export const findUserInfo = async (req: Request, res: Response) => {
+  const { email, ageType } = req.body;
+
+  try {
+    const result = await pool.query(
+      `SELECT u.id, u.name, u.email
+      FROM users u
+      WHERE u.email = $1`,
+      [email]
+    );
+    
+  
+    if (result.rows.length > 0) {
+      const user = result.rows[0];
+      const progress = await pool.query(
+        `SELECT lp.*, l.title
+        FROM level_progress lp
+        INNER JOIN levels l ON lp.level_id = l.id
+        WHERE lp.user_id = $1 AND l.ageType = $2`,
+        [user.id, ageType]
+      );
+      res.status(200).json({ user, progress: progress.rows });
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error retrieving user info:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
