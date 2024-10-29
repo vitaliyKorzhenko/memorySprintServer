@@ -77,9 +77,10 @@ const findLevelProgressById = (req, res) => __awaiter(void 0, void 0, void 0, fu
 exports.findLevelProgressById = findLevelProgressById;
 // Create new level progress
 const createLevelProgress = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { user_id, level_id, status, attempts, point, isActive } = req.body;
+    console.warn('CREATE LEVEL PROGRESS', req.body);
+    const { user_id, level_id, status, attempts, point } = req.body;
     try {
-        const result = yield db_1.default.query('INSERT INTO level_progress (user_id, level_id, status, attempts, point, isActive, created_at) VALUES ($1, $2, $3, $4, $5, $6, now()) RETURNING *', [user_id, level_id, status, attempts, point, isActive]);
+        const result = yield db_1.default.query('INSERT INTO level_progress (user_id, level_id, status, attempts, point,  created_at) VALUES ($1, $2, $3, $4, $5, now()) RETURNING *', [user_id, level_id, status, attempts, point]);
         yield db_1.default.query('UPDATE users SET points = points + $1 WHERE id = $2', [point, user_id]);
         res.status(201).json(result.rows[0]);
     }

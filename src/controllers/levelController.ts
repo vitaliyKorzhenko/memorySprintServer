@@ -66,12 +66,13 @@ export const findLevelProgressById = async (req: Request, res: Response) => {
 
 // Create new level progress
 export const createLevelProgress = async (req: Request, res: Response) => {
-  const { user_id, level_id, status, attempts, point, isActive } = req.body;
+  console.warn('CREATE LEVEL PROGRESS', req.body);
+  const { user_id, level_id, status, attempts, point } = req.body;
 
   try {
     const result = await pool.query(
-      'INSERT INTO level_progress (user_id, level_id, status, attempts, point, isActive, created_at) VALUES ($1, $2, $3, $4, $5, $6, now()) RETURNING *',
-      [user_id, level_id, status, attempts, point, isActive]
+      'INSERT INTO level_progress (user_id, level_id, status, attempts, point,  created_at) VALUES ($1, $2, $3, $4, $5, now()) RETURNING *',
+      [user_id, level_id, status, attempts, point]
     );
 
     await pool.query(
