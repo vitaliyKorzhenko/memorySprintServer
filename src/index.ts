@@ -25,7 +25,7 @@ app.use('/api', levelsRoutes); // Add API prefix for routes
 
 app.use('/api', userRoutes); //add APi user
 
-app.use('api', feedbackRoutes);
+app.use('/api', feedbackRoutes);
 
 
 //one try

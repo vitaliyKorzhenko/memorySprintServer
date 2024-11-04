@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'; // Импортируем типы
 import pool from '../config/db';
+import { isDate } from 'util/types';
 
 export const createFeedback = async (
     req: Request,
@@ -9,11 +10,12 @@ export const createFeedback = async (
         res.status(400).json({ message: 'userId is required' });
         return;
     }
-    const { userId, feedback, rate } = req.body;
+    //add validation to all fields
+    const { userId, text, rate } = req.body;
     try {
         const userFeedback = await pool.query(
-            'INSERT INTO feedback (text, userId, rate) VALUES ($1, $2, $4) RETURNING *',
-            [userId, feedback, rate]
+            'INSERT INTO feedback (userId, text, rate) VALUES ($1, $2, $3) RETURNING *',
+            [userId, text, rate]
         );
         res.status(200).json(userFeedback.rows[0]);
     } catch (err) {
@@ -26,6 +28,7 @@ export const getAllFeedbacks = async (
     re: Request,
     res: Response
 ): Promise<void> => {
+    //get all feedbacks with ratings and date, ask if I should return a user too? (Join)
     try {
         const allFeedbacks = await pool.query('SELECT text FROM feedback');
         res.status(200).json(allFeedbacks.rows);
@@ -35,7 +38,7 @@ export const getAllFeedbacks = async (
     }
 };
 
-export const getFeedbacksByUsers = async (
+export const getFeedbacksByUser = async (
     req: Request,
     res: Response
 ): Promise<void> => {
@@ -45,6 +48,8 @@ export const getFeedbacksByUsers = async (
         res.status(400).json({ message: 'Invalid userId' });
         return;
     }
+
+    //should I return also users and ratings?
 
     try {
         const allFeedbacks = await pool.query(
@@ -62,17 +67,19 @@ export const getFeedbacksByRating = async (
     req: Request,
     res: Response
 ): Promise<void> => {
-    const { rate } = req.body;
+    const rating = parseInt(req.params.rating, 10);
 
-    if (!req.body.rate) {
-        res.status(400).json({ message: 'rate is required' });
+    if (isNaN(rating)) {
+        res.status(400).json({ message: 'Invalid rating' });
         return;
     }
+
+    //one rating or range of ratings?
 
     try {
         const allFeedbacksByRating = await pool.query(
             'SELECT text FROM feedback WHERE rate = $1',
-            [rate]
+            [rating]
         );
         res.status(200).json(allFeedbacksByRating.rows);
     } catch (err) {
@@ -85,19 +92,21 @@ export const getFeedbacksByDate = async (
     req: Request,
     res: Response
 ): Promise<void> => {
-    const { date } = req.body;
+    const date = new Date(req.params.date);
 
-    if (!req.body.date) {
-        res.status(400).json({ message: 'date is required' });
-        return;
+    if (isDate(date)) {
+        // res.status(400).json({ message: 'Invalid date' });
+        // return;
+        console.log(date);
     }
 
+    //range of dates?
     try {
-        const allFeedbacksByRating = await pool.query(
-            'SELECT text FROM feedback WHERE date = $1',
+        const allFeedbacksByDate = await pool.query(
+            'SELECT text FROM feedback WHERE DATE(create_time) = Date($1)',
             [date]
         );
-        res.status(200).json(allFeedbacksByRating.rows);
+        res.status(200).json(allFeedbacksByDate.rows);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'error retrieving feedbacks' });
