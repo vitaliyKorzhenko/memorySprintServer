@@ -55,7 +55,7 @@ CREATE TYPE rating AS ENUM (
 CREATE TABLE feedback(
     id SERIAL NOT NULL,
     text text,
-    userid integer,
+    userId integer,
     rate rating,
     create_time timestamp with time zone NOT NULL DEFAULT now(),
     PRIMARY KEY(id),
