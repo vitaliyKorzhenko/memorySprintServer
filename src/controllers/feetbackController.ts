@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'; // Импортируем типы
 import pool from '../config/db';
-import { isDate } from 'util/types';
 
 export const createFeedback = async (
     req: Request,
@@ -10,7 +9,7 @@ export const createFeedback = async (
         res.status(400).json({ message: 'userId is required' });
         return;
     }
-    //add validation to all fields
+
     const { userId, text, rate } = req.body;
     try {
         const userFeedback = await pool.query(
@@ -28,7 +27,6 @@ export const getAllFeedbacks = async (
     re: Request,
     res: Response
 ): Promise<void> => {
-    //get all feedbacks with ratings and date, ask if I should return a user too? (Join)
     try {
         const allFeedbacks = await pool.query('SELECT text FROM feedback');
         res.status(200).json(allFeedbacks.rows);
@@ -48,8 +46,6 @@ export const getFeedbacksByUser = async (
         res.status(400).json({ message: 'Invalid userId' });
         return;
     }
-
-    //should I return also users and ratings?
 
     try {
         const allFeedbacks = await pool.query(
@@ -74,8 +70,6 @@ export const getFeedbacksByRating = async (
         return;
     }
 
-    //one rating or range of ratings?
-
     try {
         const allFeedbacksByRating = await pool.query(
             'SELECT text FROM feedback WHERE rate = $1',
@@ -94,13 +88,6 @@ export const getFeedbacksByDate = async (
 ): Promise<void> => {
     const date = new Date(req.params.date);
 
-    if (isDate(date)) {
-        // res.status(400).json({ message: 'Invalid date' });
-        // return;
-        console.log(date);
-    }
-
-    //range of dates?
     try {
         const allFeedbacksByDate = await pool.query(
             'SELECT text FROM feedback WHERE DATE(create_time) = Date($1)',
