@@ -17,16 +17,16 @@ router.get('/users', getUsers); // Route to get all levels
 router.post('/createUser', createUser);
 
 //disable user by id
-router.post('/disableUser/:id', disableUser);
+router.post('/disableUser', disableUser);
 
 //enable user by id
-router.post('/enableUser/:id', enableUser);
+router.post('/enableUser', enableUser);
 
 //findUserByEmail
 router.post('/findUserByEmail', findUserByEmail);
 
 //findUserByPhone
-router.post('/findUserByPhone/:phone', findUserByPhone);
+router.post('/findUserByPhone', findUserByPhone);
 
 
 export default router;
