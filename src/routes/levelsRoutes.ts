@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { findAllLevelProgresses, createLevelProgress, getAllLevels, getLevelById, findProgressByUserId, findUserInfo } from '../controllers/levelController';
+import { findAllLevelProgresses, createLevelProgress, getAllLevels, getLevelById, findProgressByUserId, findUserInfo, findRandomLevel } from '../controllers/levelController';
 
 const router = Router();
 
@@ -23,4 +23,7 @@ router.post('/findInfo', findUserInfo);        // Route to find user info
 
 
 
+// findRandomLevel
+
+router.post('/findRandomLevel', findRandomLevel);        // Route to find random level
 export default router;

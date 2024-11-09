@@ -213,26 +213,41 @@ export const findUserInfo = async (req: Request, res: Response) => {
 
 
 
-//find random level where type = number_sequence and not in progress 
+//find random level where type = number_sequence and not in progress  (user_id and level_type)
 
-export const findRandomLevelNumberSequence = async (req: Request, res: Response) => {
-  const { user_id, ageType } = req.body;
+
+
+export const findRandomLevel = async (req: Request, res: Response): Promise<void> => {
+  const { user_id, level_type } = req.body;
 
   try {
+    if (!user_id) {
+      res.status(400).json({ message: 'User ID is required' });
+      return;
+    }
+    if (!level_type) {
+      res.status(400).json({ message: 'Level type is required' });
+      return;
+    }
+
     const result = await pool.query(
       `SELECT l.*
-      FROM levels l
-      LEFT JOIN level_progress lp ON l.id = lp.level_id AND lp.user_id = $1
-      WHERE l.ageType = $2 AND l.type = 'number_sequence' AND lp.id IS NULL
-      ORDER BY RANDOM()
-      LIMIT 1`,
-      [user_id, ageType]
+       FROM levels l
+       WHERE l.type = $1
+         AND l.id NOT IN (
+           SELECT level_id
+           FROM level_progress
+           WHERE user_id = $2
+         )
+       ORDER BY RANDOM()
+       LIMIT 1`,
+      [level_type, user_id]
     );
 
     if (result.rows.length > 0) {
       res.status(200).json(result.rows[0]);
     } else {
-      res.status(404).json({ message: 'No levels found' });
+      res.status(200).json({ message: 'No levels found' });
     }
   } catch (error) {
     console.error('Error retrieving random level:', error);

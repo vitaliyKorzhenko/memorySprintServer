@@ -14,4 +14,6 @@ router.post('/createLevelProgress', levelController_1.createLevelProgress); // R
 router.post('/findProgressByUserId', levelController_1.findProgressByUserId); // Route to find user info
 //find user info
 router.post('/findInfo', levelController_1.findUserInfo); // Route to find user info
+// findRandomLevel
+router.post('/findRandomLevel', levelController_1.findRandomLevel); // Route to find random level
 exports.default = router;
