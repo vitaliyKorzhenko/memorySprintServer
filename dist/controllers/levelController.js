@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findUserInfo = exports.findProgressByUserId = exports.findUsersByLevelId = exports.deleteLevelProgress = exports.updateLevelProgress = exports.createLevelProgress = exports.findLevelProgressById = exports.findAllLevelProgresses = exports.getLevelById = exports.getAllLevels = void 0;
+exports.findRandomLevelNumberSequence = exports.findUserInfo = exports.findProgressByUserId = exports.findUsersByLevelId = exports.deleteLevelProgress = exports.updateLevelProgress = exports.createLevelProgress = exports.findLevelProgressById = exports.findAllLevelProgresses = exports.getLevelById = exports.getAllLevels = void 0;
 const db_1 = __importDefault(require("../config/db"));
 // Get all levels
 const getAllLevels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -183,3 +183,26 @@ const findUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.findUserInfo = findUserInfo;
+//find random level where type = number_sequence and not in progress 
+const findRandomLevelNumberSequence = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { user_id, ageType } = req.body;
+    try {
+        const result = yield db_1.default.query(`SELECT l.*
+      FROM levels l
+      LEFT JOIN level_progress lp ON l.id = lp.level_id AND lp.user_id = $1
+      WHERE l.ageType = $2 AND l.type = 'number_sequence' AND lp.id IS NULL
+      ORDER BY RANDOM()
+      LIMIT 1`, [user_id, ageType]);
+        if (result.rows.length > 0) {
+            res.status(200).json(result.rows[0]);
+        }
+        else {
+            res.status(404).json({ message: 'No levels found' });
+        }
+    }
+    catch (error) {
+        console.error('Error retrieving random level:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+exports.findRandomLevelNumberSequence = findRandomLevelNumberSequence;

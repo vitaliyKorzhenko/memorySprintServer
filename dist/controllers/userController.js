@@ -46,7 +46,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.createUser = createUser;
 //disable user by id
 const disableUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
+    const { id } = req.body;
     try {
         const result = yield db_1.default.query(`UPDATE users SET "isActive" = false WHERE id = $1 RETURNING *`, [id]);
         if (result.rows.length > 0) {
@@ -64,7 +64,7 @@ const disableUser = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.disableUser = disableUser;
 //enable user by id
 const enableUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
+    const { id } = req.body;
     try {
         const result = yield db_1.default.query(`UPDATE users SET "isActive" = true WHERE id = $1 RETURNING *`, [id]);
         if (result.rows.length > 0) {
@@ -105,7 +105,7 @@ const findUserByEmail = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.findUserByEmail = findUserByEmail;
 //get user info by phone
 const findUserByPhone = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { phone } = req.params;
+    const { phone } = req.body;
     try {
         const result = yield db_1.default.query(`SELECT * FROM users WHERE phone = $1`, [phone]);
         if (result.rows.length > 0) {

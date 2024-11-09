@@ -15,8 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/server.ts
 const express_1 = __importDefault(require("express"));
 const levelsRoutes_1 = __importDefault(require("./routes/levelsRoutes"));
-const levelsSeed_1 = __importDefault(require("./db/levelsSeed"));
-const userSeed_1 = __importDefault(require("./db/userSeed"));
+const feedbackRoutes_1 = __importDefault(require("./routes/feedbackRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const apiMiddleware_1 = __importDefault(require("./apiMiddleware"));
 const app = (0, express_1.default)();
@@ -26,13 +25,20 @@ app.use('/api', apiMiddleware_1.default); // Проверка API-ключа д�
 app.use(express_1.default.json()); // Parse JSON request bodies
 // Connect the routes
 app.use('/api', levelsRoutes_1.default); // Add API prefix for routes
-app.use('/api', userRoutes_1.default); //add APi user  
+app.use('/api', userRoutes_1.default); //add APi user
+app.use('/api', feedbackRoutes_1.default);
 //one try
 const insertInitialData = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, userSeed_1.default)();
-    yield (0, levelsSeed_1.default)();
+    //  await seedUsers();
+    //  await insertLevels();
+    //  await insertSueqenceLevels();
 });
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`Server started on  ${PORT}`);
-    // await insertInitialData();
+    try {
+        yield insertInitialData();
+    }
+    catch (error) {
+        console.error('Error inserting initial data:', error);
+    }
 }));

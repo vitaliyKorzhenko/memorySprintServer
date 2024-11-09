@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const feetbackController_1 = require("../controllers/feetbackController");
+const router = (0, express_1.Router)();
+router.post('/createFeedback', feetbackController_1.createFeedback);
+router.get('/feedback/user/:userId', feetbackController_1.getFeedbacksByUser);
+router.get('/feedback', feetbackController_1.getAllFeedbacks);
+router.get('/feedback/rating/:rating', feetbackController_1.getFeedbacksByRating);
+router.get('/feedback/date/:date', feetbackController_1.getFeedbacksByDate);
+exports.default = router;
