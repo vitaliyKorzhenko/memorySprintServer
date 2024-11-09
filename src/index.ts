@@ -7,6 +7,7 @@ import insertLevels from './db/levelsSeed';
 import seedUsers from './db/userSeed';
 import userRoutes from './routes/userRoutes'
 import apiKeyMiddleware from './apiMiddleware';
+import insertSueqenceLevels from './db/suequenceLevelSeed';
 
 
 const app = express();
@@ -30,12 +31,19 @@ app.use('/api', feedbackRoutes);
 
 //one try
 const insertInitialData = async () => {
-   await seedUsers();
-   await insertLevels();
+  //  await seedUsers();
+  //  await insertLevels();
+  //  await insertSueqenceLevels();
+
   };
 
 app.listen(PORT, async () => {
-  console.log(`Server started on  ${PORT}`);
 
-    // await insertInitialData();
+    console.log(`Server started on  ${PORT}`);
+     try {
+        await insertInitialData();
+     } catch (error) {
+      console.error('Error inserting initial data:', error);
+     } 
+   
 });

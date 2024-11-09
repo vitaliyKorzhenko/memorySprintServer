@@ -211,3 +211,31 @@ export const findUserInfo = async (req: Request, res: Response) => {
   }
 }
 
+
+
+//find random level where type = number_sequence and not in progress 
+
+export const findRandomLevelNumberSequence = async (req: Request, res: Response) => {
+  const { user_id, ageType } = req.body;
+
+  try {
+    const result = await pool.query(
+      `SELECT l.*
+      FROM levels l
+      LEFT JOIN level_progress lp ON l.id = lp.level_id AND lp.user_id = $1
+      WHERE l.ageType = $2 AND l.type = 'number_sequence' AND lp.id IS NULL
+      ORDER BY RANDOM()
+      LIMIT 1`,
+      [user_id, ageType]
+    );
+
+    if (result.rows.length > 0) {
+      res.status(200).json(result.rows[0]);
+    } else {
+      res.status(404).json({ message: 'No levels found' });
+    }
+  } catch (error) {
+    console.error('Error retrieving random level:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
