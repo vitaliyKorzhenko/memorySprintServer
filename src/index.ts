@@ -8,6 +8,7 @@ import seedUsers from './db/userSeed';
 import userRoutes from './routes/userRoutes'
 import apiKeyMiddleware from './apiMiddleware';
 import insertSueqenceLevels from './db/suequenceLevelSeed';
+import insertNumberGridLevels from './db/numberLevelSeed';
 
 
 const app = express();
@@ -31,9 +32,18 @@ app.use('/api', feedbackRoutes);
 
 //one try
 const insertInitialData = async () => {
+  //insert your seed functions here (for one try)
+
   //  await seedUsers();
   //  await insertLevels();
   //  await insertSueqenceLevels();
+  try {
+    //await insertNumberGridLevels();
+
+    
+  } catch (error) {
+    
+  }
 
   };
 
