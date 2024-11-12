@@ -29,9 +29,15 @@ app.use('/api', userRoutes_1.default); //add APi user
 app.use('/api', feedbackRoutes_1.default);
 //one try
 const insertInitialData = () => __awaiter(void 0, void 0, void 0, function* () {
+    //insert your seed functions here (for one try)
     //  await seedUsers();
     //  await insertLevels();
     //  await insertSueqenceLevels();
+    try {
+        //await insertNumberGridLevels();
+    }
+    catch (error) {
+    }
 });
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`Server started on  ${PORT}`);
