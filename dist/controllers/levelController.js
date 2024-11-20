@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findRandomLevel = exports.findUserInfo = exports.findProgressByUserId = exports.findUsersByLevelId = exports.deleteLevelProgress = exports.updateLevelProgress = exports.createLevelProgress = exports.findLevelProgressById = exports.findAllLevelProgresses = exports.getLevelById = exports.getAllLevels = void 0;
+exports.getLevelPackageById = exports.findRandomLevel = exports.findUserInfo = exports.findProgressByUserId = exports.findUsersByLevelId = exports.deleteLevelProgress = exports.updateLevelProgress = exports.createLevelProgress = exports.findLevelProgressById = exports.findAllLevelProgresses = exports.getLevelById = exports.getAllLevels = void 0;
 const db_1 = __importDefault(require("../config/db"));
 // Get all levels
 const getAllLevels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -218,3 +218,22 @@ const findRandomLevel = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.findRandomLevel = findRandomLevel;
+//get level_package by id 
+const getLevelPackageById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const result = yield db_1.default.query('SELECT * FROM level_package WHERE id = $1', [id]);
+        if (result.rows.length > 0) {
+            res.status(200).json(result.rows[0]);
+        }
+        else {
+            res.status(404).json({ message: 'Level package not found' });
+        }
+    }
+    catch (error) {
+        console.error('Error retrieving level package:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+exports.getLevelPackageById = getLevelPackageById;
+//create level_package

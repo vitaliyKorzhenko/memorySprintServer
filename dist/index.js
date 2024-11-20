@@ -35,6 +35,7 @@ const insertInitialData = () => __awaiter(void 0, void 0, void 0, function* () {
     //  await insertSueqenceLevels();
     try {
         //await insertNumberGridLevels();
+        //await insertLevelPackage();
     }
     catch (error) {
     }

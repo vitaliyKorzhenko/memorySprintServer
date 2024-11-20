@@ -254,3 +254,29 @@ export const findRandomLevel = async (req: Request, res: Response): Promise<void
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+//get level_package by id 
+
+export const getLevelPackageById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query('SELECT * FROM level_package WHERE id = $1', [id]);
+
+    if (result.rows.length > 0) {
+      res.status(200).json(result.rows[0]);
+    } else {
+      res.status(404).json({ message: 'Level package not found' });
+    }
+  } catch (error) {
+    console.error('Error retrieving level package:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+
+//create level_package
+

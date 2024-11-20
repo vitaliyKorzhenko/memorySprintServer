@@ -9,6 +9,7 @@ import userRoutes from './routes/userRoutes'
 import apiKeyMiddleware from './apiMiddleware';
 import insertSueqenceLevels from './db/suequenceLevelSeed';
 import insertNumberGridLevels from './db/numberLevelSeed';
+import insertLevelPackage from './db/levelPackageSeed';
 
 
 const app = express();
@@ -40,7 +41,7 @@ const insertInitialData = async () => {
   try {
     //await insertNumberGridLevels();
 
-    
+    //await insertLevelPackage();
   } catch (error) {
     
   }
