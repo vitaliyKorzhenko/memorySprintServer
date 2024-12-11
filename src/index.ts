@@ -1,15 +1,10 @@
 // src/server.ts
 import express from 'express';
-import { getUsers } from './controllers/userController';
 import levelsRoutes from './routes/levelsRoutes';
 import feedbackRoutes from './routes/feedbackRoutes';
-import insertLevels from './db/levelsSeed';
-import seedUsers from './db/userSeed';
 import userRoutes from './routes/userRoutes'
 import apiKeyMiddleware from './apiMiddleware';
-import insertSueqenceLevels from './db/suequenceLevelSeed';
-import insertNumberGridLevels from './db/numberLevelSeed';
-import insertLevelPackage from './db/levelPackageSeed';
+import levelNumberSequenceRoute from './routes/levelNumberSequenceRoute';
 
 
 const app = express();
@@ -29,6 +24,8 @@ app.use('/api', levelsRoutes); // Add API prefix for routes
 app.use('/api', userRoutes); //add APi user
 
 app.use('/api', feedbackRoutes);
+
+app.use('/api/levelNumberSequence', levelNumberSequenceRoute); // Add API prefix for routes
 
 
 //one try
@@ -52,7 +49,7 @@ app.listen(PORT, async () => {
 
     console.log(`Server started on  ${PORT}`);
      try {
-        await insertInitialData();
+        //await insertInitialData();
      } catch (error) {
       console.error('Error inserting initial data:', error);
      } 
