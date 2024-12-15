@@ -5,6 +5,7 @@ import feedbackRoutes from './routes/feedbackRoutes';
 import userRoutes from './routes/userRoutes'
 import apiKeyMiddleware from './apiMiddleware';
 import levelNumberSequenceRoute from './routes/levelNumberSequenceRoute';
+import levelRebusRoute from './routes/levelRebusRoute';
 
 
 const app = express();
@@ -27,6 +28,9 @@ app.use('/api', feedbackRoutes);
 
 app.use('/api/levelNumberSequence', levelNumberSequenceRoute); // Add API prefix for routes
 
+
+//rebus level route
+app.use('/api/levelRebus', levelRebusRoute); // Add API prefix for routes
 
 //one try
 const insertInitialData = async () => {
