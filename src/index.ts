@@ -5,6 +5,7 @@ import feedbackRoutes from './routes/feedbackRoutes';
 import userRoutes from './routes/userRoutes'
 import apiKeyMiddleware from './apiMiddleware';
 import levelNumberSequenceRoute from './routes/levelNumberSequenceRoute';
+import numberGrid33Route from './routes/numberGrid33Route';
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.use('/api', userRoutes); //add APi user
 app.use('/api', feedbackRoutes);
 
 app.use('/api/levelNumberSequence', levelNumberSequenceRoute); // Add API prefix for routes
+app.use('/api/numberGrid33', numberGrid33Route)
 
 
 //one try
