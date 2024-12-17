@@ -18,6 +18,8 @@ const levelsRoutes_1 = __importDefault(require("./routes/levelsRoutes"));
 const feedbackRoutes_1 = __importDefault(require("./routes/feedbackRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const apiMiddleware_1 = __importDefault(require("./apiMiddleware"));
+const levelNumberSequenceRoute_1 = __importDefault(require("./routes/levelNumberSequenceRoute"));
+const levelRebusRoute_1 = __importDefault(require("./routes/levelRebusRoute"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
 app.use('/api', apiMiddleware_1.default); // Проверка API-ключа для всех маршрутов под /api
@@ -27,6 +29,9 @@ app.use(express_1.default.json()); // Parse JSON request bodies
 app.use('/api', levelsRoutes_1.default); // Add API prefix for routes
 app.use('/api', userRoutes_1.default); //add APi user
 app.use('/api', feedbackRoutes_1.default);
+app.use('/api/levelNumberSequence', levelNumberSequenceRoute_1.default); // Add API prefix for routes
+//rebus level route
+app.use('/api/levelRebus', levelRebusRoute_1.default); // Add API prefix for routes
 //one try
 const insertInitialData = () => __awaiter(void 0, void 0, void 0, function* () {
     //insert your seed functions here (for one try)
@@ -43,7 +48,7 @@ const insertInitialData = () => __awaiter(void 0, void 0, void 0, function* () {
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`Server started on  ${PORT}`);
     try {
-        yield insertInitialData();
+        //await insertInitialData();
     }
     catch (error) {
         console.error('Error inserting initial data:', error);
