@@ -8,8 +8,7 @@ import levelNumberSequenceRoute from './routes/levelNumberSequenceRoute';
 
 import numberGrid33Route from './routes/numberGrid33Route';
 import levelRebusRoute from './routes/levelRebusRoute';
-
-
+import levelShapeSelection from "./routes/levelShapeSelectionRoute";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,8 +29,10 @@ app.use('/api', userRoutes); //add APi user
 app.use('/api', feedbackRoutes);
 
 app.use('/api/levelNumberSequence', levelNumberSequenceRoute); // Add API prefix for routes
+
 app.use('/api/numberGrid33', numberGrid33Route)
 
+app.use('api/levelShapeSelection', levelShapeSelection);
 
 //rebus level route
 app.use('/api/levelRebus', levelRebusRoute); // Add API prefix for routes
