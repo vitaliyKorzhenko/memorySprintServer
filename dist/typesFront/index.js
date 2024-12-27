@@ -19,6 +19,7 @@ var LevelType;
     LevelType["NUMBER_GRID33"] = "number_grid_33";
     LevelType["SHAPE_SELECTION"] = "shape_selection";
     LevelType["PENCIL_PUZZLE"] = "pencil_puzzle";
+    LevelType["MAX_MIN"] = "max_min";
 })(LevelType || (exports.LevelType = LevelType = {}));
 // Enum for age groups
 var AgeGroup;
@@ -205,6 +206,27 @@ exports.levels14Plus = [
         options: ['1', '2', '3', '4'],
         mode: LevelMode.VARIANTS,
         point: 2
+    },
+    {
+        id: 8,
+        date: '2024-10-09',
+        type: LevelType.TEXT_TASK,
+        text: 'How many apples are on the table?',
+        answer: 2,
+        details: { image: 'apple.jpg' },
+        useImage: true,
+        point: 5,
+        mode: LevelMode.VARIANTS
+    },
+    {
+        id: 9,
+        date: '2024-10-09',
+        type: LevelType.MAX_MIN,
+        sequence: ['2^100', '3^50', '4^25'],
+        answer: 2,
+        point: 3,
+        mode: LevelMode.VARIANTS,
+        maxOrMinFind: 'max',
     }
 ];
 // Function to get a level by age group and level ID

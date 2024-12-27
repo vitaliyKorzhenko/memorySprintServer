@@ -15,4 +15,6 @@ router.post('/enableUser', userController_1.enableUser);
 router.post('/findUserByEmail', userController_1.findUserByEmail);
 //findUserByPhone
 router.post('/findUserByPhone', userController_1.findUserByPhone);
+//addUserHistory
+router.post('/addUserHistory', userController_1.addUserHistory);
 exports.default = router;

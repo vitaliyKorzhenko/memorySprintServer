@@ -6,6 +6,7 @@ import {
     findUserByEmail,
     findUserByPhone,
     getUsers,
+    addUserHistory
 } from '../controllers/userController';
 
 const router = Router();
@@ -27,6 +28,10 @@ router.post('/findUserByEmail', findUserByEmail);
 
 //findUserByPhone
 router.post('/findUserByPhone', findUserByPhone);
+
+//addUserHistory
+
+router.post('/addUserHistory', addUserHistory);
 
 
 export default router;

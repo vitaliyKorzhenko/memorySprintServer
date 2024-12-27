@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findUserByPhone = exports.findUserByEmail = exports.enableUser = exports.disableUser = exports.createUser = exports.getUsers = void 0;
+exports.addUserHistory = exports.findUserByPhone = exports.findUserByEmail = exports.enableUser = exports.disableUser = exports.createUser = exports.getUsers = void 0;
 const db_1 = __importDefault(require("../config/db"));
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -154,3 +154,41 @@ const findUserByPhone = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.findUserByPhone = findUserByPhone;
+const addUserHistory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId, gameType, status, points, gameDetails, minusLifes } = req.body;
+    const userHistoryData = {
+        userId: userId,
+        gameType: gameType,
+        status: status,
+        points: points,
+        gameDetails: gameDetails,
+        minusLifes: minusLifes
+    };
+    try {
+        if (!userId) {
+            res.status(400).json({ message: 'userId is required' });
+            return;
+        }
+        const result = yield db_1.default.query(`INSERT INTO user_history (user_id, game_type, status, points, game_details, created_at)
+            VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *`, [
+            userHistoryData.userId,
+            userHistoryData.gameType,
+            userHistoryData.status,
+            userHistoryData.points,
+            userHistoryData.gameDetails,
+        ]);
+        //add points to user
+        const user = yield db_1.default.query(`SELECT * FROM users WHERE id = $1`, [userId]);
+        const userPoints = user.rows[0].points + points;
+        //update user lifes
+        const userLifes = user.rows[0].lifes > 0 && user.rows[0].lifes > minusLifes ? user.rows[0].lifes - minusLifes : 0;
+        //update user points and lifes
+        yield db_1.default.query(`UPDATE users SET points = $1, lifes = $2 WHERE id = $3`, [userPoints, userLifes, userId]);
+        res.status(201).json(result.rows[0]);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'add user history error' });
+    }
+});
+exports.addUserHistory = addUserHistory;

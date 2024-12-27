@@ -1,5 +1,7 @@
 // Enum for level types
 
+import { text } from "stream/consumers";
+
 
 export interface FigureWithColor {
     id: number;            // Уникальный идентификатор фигуры
@@ -51,7 +53,8 @@ export enum LevelType {
     TEXT_TASK = 'textask',
     NUMBER_GRID33 = 'number_grid_33',
     SHAPE_SELECTION = 'shape_selection',
-    PENCIL_PUZZLE = 'pencil_puzzle'
+    PENCIL_PUZZLE = 'pencil_puzzle',
+    MAX_MIN = 'max_min',
 
   }
 
@@ -97,6 +100,21 @@ export enum AgeGroup {
     answer: number;
   }
 
+
+  export interface TextTaskLevel extends LevelMain {
+    text: string;
+    answer: number;
+    details: object;
+    useImage: boolean;
+
+  }
+
+  export interface MaxMinLevel extends LevelMain {
+    type: LevelType.MAX_MIN;
+    sequence: string[];
+    answer: number;
+    maxOrMinFind: string;
+  }
 
 // Array for age group 6-9
 export const levels6to9: LevelMain[] = [
@@ -285,7 +303,30 @@ export const levels6to9: LevelMain[] = [
         options: ['1', '2', '3', '4'],
         mode: LevelMode.VARIANTS,
         point: 2
-      } as PencilPuzzleLevel
+      } as PencilPuzzleLevel,
+      {
+        id: 8,
+        date: '2024-10-09',
+        type: LevelType.TEXT_TASK,
+        text: 'How many apples are on the table?',
+        answer: 2,  
+        details: {image: 'apple.jpg'},
+        useImage: true,
+        point: 5,
+        mode: LevelMode.VARIANTS
+        
+      } as TextTaskLevel,
+      {
+        id: 9,
+        date: '2024-10-09',
+        type: LevelType.MAX_MIN,
+        sequence: ['2^100', '3^50', '4^25'],
+        answer: 2,  
+        point: 3,
+        mode: LevelMode.VARIANTS,
+        maxOrMinFind: 'max',
+
+      } as MaxMinLevel
      
      
   ];

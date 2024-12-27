@@ -19,7 +19,9 @@ const feedbackRoutes_1 = __importDefault(require("./routes/feedbackRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const apiMiddleware_1 = __importDefault(require("./apiMiddleware"));
 const levelNumberSequenceRoute_1 = __importDefault(require("./routes/levelNumberSequenceRoute"));
+const numberGrid33Route_1 = __importDefault(require("./routes/numberGrid33Route"));
 const levelRebusRoute_1 = __importDefault(require("./routes/levelRebusRoute"));
+const levelShapeSelectionRoute_1 = __importDefault(require("./routes/levelShapeSelectionRoute"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
 app.use('/api', apiMiddleware_1.default); // Проверка API-ключа для всех маршрутов под /api
@@ -30,6 +32,8 @@ app.use('/api', levelsRoutes_1.default); // Add API prefix for routes
 app.use('/api', userRoutes_1.default); //add APi user
 app.use('/api', feedbackRoutes_1.default);
 app.use('/api/levelNumberSequence', levelNumberSequenceRoute_1.default); // Add API prefix for routes
+app.use('/api/numberGrid33', numberGrid33Route_1.default);
+app.use('api/levelShapeSelection', levelShapeSelectionRoute_1.default);
 //rebus level route
 app.use('/api/levelRebus', levelRebusRoute_1.default); // Add API prefix for routes
 //one try

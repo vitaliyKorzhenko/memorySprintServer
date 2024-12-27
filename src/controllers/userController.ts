@@ -175,3 +175,69 @@ export const findUserByPhone = async (
         res.status(500).json({ message: 'get user by phone error' });
     }
 };
+
+
+//  users and user_history 
+// add to user history by user id 
+
+interface UserHistoryModel {
+    userId: number;
+    gameType: string;
+    status: string;
+    points: number;
+    gameDetails: JSON;
+    minusLifes: number;
+}
+
+export const addUserHistory = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    const { userId, gameType, status, points, gameDetails, minusLifes } = req.body;
+    const userHistoryData: UserHistoryModel = {
+        userId: userId,
+        gameType: gameType,
+        status: status,
+        points: points,
+        gameDetails: gameDetails,
+        minusLifes: minusLifes
+    };
+    try {
+        if (!userId) {
+            res.status(400).json({ message: 'userId is required' });
+            return;
+        }
+        const result = await pool.query(
+            `INSERT INTO user_history (user_id, game_type, status, points, game_details, created_at)
+            VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *`,
+            [
+                userHistoryData.userId,
+                userHistoryData.gameType,
+                userHistoryData.status,
+                userHistoryData.points,
+                userHistoryData.gameDetails,
+            ]
+        );
+
+        //add points to user
+        const user = await pool.query(
+            `SELECT * FROM users WHERE id = $1`,
+            [userId]
+        );
+        const userPoints = user.rows[0].points + points;
+
+        //update user lifes
+        const userLifes = user.rows[0].lifes > 0 &&  user.rows[0].lifes > minusLifes ?  user.rows[0].lifes - minusLifes : 0;
+
+       //update user points and lifes
+        await pool.query(
+            `UPDATE users SET points = $1, lifes = $2 WHERE id = $3`,
+            [userPoints, userLifes, userId]
+        );
+
+        res.status(201).json(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'add user history error' });
+    }
+};
