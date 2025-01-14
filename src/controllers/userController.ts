@@ -208,7 +208,7 @@ export const addUserHistory = async (
             return;
         }
         const result = await pool.query(
-            `INSERT INTO user_history (user_id, game_type, status, points, game_details, created_at)
+            `INSERT INTO user_history (userId, game_type, status, points, game_details, created_at)
             VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *`,
             [
                 userHistoryData.userId,

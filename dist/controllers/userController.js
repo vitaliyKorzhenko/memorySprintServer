@@ -169,7 +169,7 @@ const addUserHistory = (req, res) => __awaiter(void 0, void 0, void 0, function*
             res.status(400).json({ message: 'userId is required' });
             return;
         }
-        const result = yield db_1.default.query(`INSERT INTO user_history (user_id, game_type, status, points, game_details, created_at)
+        const result = yield db_1.default.query(`INSERT INTO user_history (userId, game_type, status, points, game_details, created_at)
             VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *`, [
             userHistoryData.userId,
             userHistoryData.gameType,
