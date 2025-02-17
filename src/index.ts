@@ -9,10 +9,12 @@ import levelNumberSequenceRoute from './routes/levelNumberSequenceRoute';
 import numberGrid33Route from './routes/numberGrid33Route';
 import levelRebusRoute from './routes/levelRebusRoute';
 import levelShapeSelection from "./routes/levelShapeSelectionRoute";
+import {connectToDatabase} from "./db/db";
+import dotenv from "dotenv";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+dotenv.config();
 
 app.use('/api', apiKeyMiddleware); // Проверка API-ключа для всех маршрутов под /api
 
@@ -56,9 +58,10 @@ const insertInitialData = async () => {
 
 app.listen(PORT, async () => {
 
-    console.log(`Server started on  ${PORT}`);
      try {
+        console.log(`Server started on  ${PORT}`);
         //await insertInitialData();
+         await connectToDatabase()
      } catch (error) {
       console.error('Error inserting initial data:', error);
      } 
