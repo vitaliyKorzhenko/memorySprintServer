@@ -1,7 +1,7 @@
 // src/controllers/userController.ts
 import { Request, Response } from 'express'; // Импортируем типы
-import pool from '../config/db';
 import User from "../models/user.model";
+import {ICompletedExercise} from "../types/user.types";
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -171,68 +171,184 @@ export const findUserByPhone = async (
     }
 };
 
-
-//  users and user_history 
-// add to user history by user id 
-
-interface UserHistoryModel {
-    userId: number;
-    gameType: string;
-    status: string;
-    points: number;
-    gameDetails: JSON;
-    minusLifes: number;
-}
-
-export const addUserHistory = async (
-    req: Request,
-    res: Response
-): Promise<void> => {
-    const { userId, gameType, status, points, gameDetails, minusLifes } = req.body;
-    const userHistoryData: UserHistoryModel = {
-        userId: userId,
-        gameType: gameType,
-        status: status,
-        points: points,
-        gameDetails: gameDetails,
-        minusLifes: minusLifes
-    };
+// Добавление прогресса (завершение задания)
+export const addCompleteExercise = async (req: Request, res: Response): Promise<void> => {
     try {
-        if (!userId) {
-            res.status(400).json({ message: 'userId is required' });
+        const { id } = req.params;
+        const { exerciseId, score } = req.body;
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
             return;
         }
-        const result = await pool.query(
-            `INSERT INTO user_history (userId, game_type, status, points, game_details, created_at)
-            VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *`,
-            [
-                userHistoryData.userId,
-                userHistoryData.gameType,
-                userHistoryData.status,
-                userHistoryData.points,
-                userHistoryData.gameDetails,
-            ]
+
+        if (!user.progress) {
+            user.progress = { completedExercises: [], incompleteExercises: [], totalScore: 0 };
+        }
+
+        const isExerciseExists = user.progress.completedExercises.some(
+            (ex) => ex.exerciseId === exerciseId // Сравниваем числа
         );
 
-        //add points to user
-        const user = await pool.query(
-            `SELECT * FROM users WHERE id = $1`,
-            [userId]
+
+        if (isExerciseExists) {
+            res.status(400).json({ message: "Exercise already exists in complete exercises" });
+            return;
+        }
+
+        user.progress.completedExercises.push({ exerciseId, score });
+        user.progress.totalScore += score;
+
+        await user.save();
+
+        res.status(200).json({ message: "Progress added successfully", user });
+
+    } catch (error) {
+        res.status(500).json({ message: "Error adding progress", error });
+    }
+};
+
+export const addIncompleteExercise = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+        const { exerciseId, progress } = req.body;
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        if (!user.progress) {
+            user.progress = { completedExercises: [], incompleteExercises: [], totalScore: 0 };
+        }
+
+        const isExerciseExists = user.progress.incompleteExercises.some(
+            (ex) => ex.exerciseId === exerciseId
         );
-        const userPoints = user.rows[0].points + points;
 
-        //update user lifes
-        const userLifes = user.rows[0].lifes > 0 &&  user.rows[0].lifes > minusLifes ?  user.rows[0].lifes - minusLifes : 0;
+        if (isExerciseExists) {
+            res.status(400).json({ message: "Exercise already exists in incomplete exercises" });
+            return;
+        }
 
-       //update user points and lifes
-        await pool.query(
-            `UPDATE users SET points = $1, lifes = $2 WHERE id = $3`,
-            [userPoints, userLifes, userId]
+        user.progress.incompleteExercises.push({
+            exerciseId,
+            progress: progress || 0, // Если progress не передан, по умолчанию 0
+        });
+
+        await user.save();
+
+        res.status(200).json({ message: "Incomplete exercise added successfully", user });
+    } catch (error) {
+        res.status(500).json({ message: "Error adding incomplete exercise", error });
+    }
+};
+
+export const removeIncompleteExercise = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id, exerciseId } = req.params;
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+
+        if (!user.progress) {
+            user.progress = { completedExercises: [], incompleteExercises: [], totalScore: 0 };
+        }
+
+        const taskIndex = user.progress.incompleteExercises.findIndex(
+            (ex) => ex.exerciseId === +exerciseId
         );
 
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'add user history error' });
+        if (taskIndex === -1) {
+            res.status(404).json({ message: "Task not found in incomplete exercises" });
+            return;
+        }
+
+        user.progress.incompleteExercises.splice(taskIndex, 1);
+
+        await user.save();
+
+        res.status(200).json({ message: "Task removed from incomplete exercises successfully", user });
+    } catch (error) {
+        res.status(500).json({ message: "Error removing task from incomplete exercises", error });
+    }
+};
+
+export const getCompletedExercises = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        if (!user.progress) {
+            user.progress = { completedExercises: [], incompleteExercises: [], totalScore: 0 };
+        }
+
+        res.status(200).json(user.progress.completedExercises);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching completed exercises", error });
+    }
+};
+
+export const getIncompleteExercises = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+
+        const user = await User.findById(id).exec();
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        if (!user.progress) {
+            user.progress = { completedExercises: [], incompleteExercises: [], totalScore: 0 };
+        }
+
+        res.status(200).json(user.progress.incompleteExercises);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching incomplete exercises", error });
+    }
+};
+
+export const getIncompleteExerciseById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id, exerciseId } = req.params;
+
+        const user = await User.findById(id).exec();
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        if (!user.progress) {
+            user.progress = { completedExercises: [], incompleteExercises: [], totalScore: 0 };
+        }
+
+        const exercise = user.progress.incompleteExercises.find(
+            (ex) => ex.exerciseId.toString() === exerciseId
+        );
+
+        if (!exercise) {
+            res.status(404).json({ message: "Incomplete exercise not found" });
+            return;
+        }
+
+        res.status(200).json(exercise);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching incomplete exercise", error });
     }
 };

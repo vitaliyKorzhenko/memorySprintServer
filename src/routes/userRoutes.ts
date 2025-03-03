@@ -6,7 +6,11 @@ import {
     findUserByEmail,
     findUserByPhone,
     getUsers,
-    addUserHistory
+    addCompleteExercise,
+    addIncompleteExercise,
+    removeIncompleteExercise,
+    getCompletedExercises,
+    getIncompleteExerciseById, getIncompleteExercises
 } from '../controllers/userController';
 
 const router = Router();
@@ -29,9 +33,18 @@ router.post('/findUserByEmail', findUserByEmail);
 //findUserByPhone
 router.post('/findUserByPhone', findUserByPhone);
 
-//addUserHistory
-
-router.post('/addUserHistory', addUserHistory);
+//addCompletedTasks
+router.post('/user/:id/addCompleteExercise/', addCompleteExercise);
+//addIncompleteTasks
+router.post('/user/:id/addIncompleteExercise/', addIncompleteExercise);
+//removeFromIncompleteTasks
+router.delete('/user/:id/removeIncompleteExercise/:exerciseId', removeIncompleteExercise);
+//getCompletedTasks
+router.get("/user/:id/completed", getCompletedExercises);
+//get incomplete tasks by id
+router.get("/user/:id/incomplete/:exerciseId", getIncompleteExerciseById);
+//get incomplete tasks
+router.get("/user/:id/incomplete", getIncompleteExercises);
 
 
 export default router;
