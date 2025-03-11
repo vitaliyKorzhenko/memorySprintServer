@@ -2,6 +2,7 @@
 import { Request, Response } from 'express'; // Импортируем типы
 import User from "../models/user.model";
 import {ICompletedExercise} from "../types/user.types";
+import Round from "../models/round.model";
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -174,8 +175,7 @@ export const findUserByPhone = async (
 // Добавление прогресса (завершение задания)
 export const addCompleteExercise = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { id } = req.params;
-        const { exerciseId, score } = req.body;
+        const { id, roundId } = req.params;
 
         const user = await User.findById(id);
 
@@ -188,8 +188,14 @@ export const addCompleteExercise = async (req: Request, res: Response): Promise<
             user.progress = { completedExercises: [], incompleteExercises: [], totalScore: 0 };
         }
 
+        const round = await Round.findOne({ id: roundId });
+        if (!round) {
+            res.status(404).json({ message: 'Round not found' });
+            return
+        }
+
         const isExerciseExists = user.progress.completedExercises.some(
-            (ex) => ex.exerciseId === exerciseId // Сравниваем числа
+            (ex) => ex.exerciseId === round?.id // Сравниваем числа
         );
 
 
@@ -198,8 +204,12 @@ export const addCompleteExercise = async (req: Request, res: Response): Promise<
             return;
         }
 
-        user.progress.completedExercises.push({ exerciseId, score });
-        user.progress.totalScore += score;
+        user.progress.completedExercises.push({
+            exerciseId: round.id,
+            score: round.point,
+        });
+
+        user.progress.totalScore += round.point;
 
         await user.save();
 

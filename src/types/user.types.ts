@@ -17,7 +17,7 @@ interface IProgress {
     totalScore: number,
 }
 
-export interface IUser {
+export interface IUser extends Document {
     email: string;
     nickname: string;
     phone?: string;
@@ -25,5 +25,5 @@ export interface IUser {
     points?: number;
     isActive?: boolean;
     createdAt?: Date;
-    progress?: IProgress;
+    progress: IProgress;
 }
