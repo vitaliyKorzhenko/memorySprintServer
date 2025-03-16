@@ -11,13 +11,16 @@ import levelRebusRoute from './routes/levelRebusRoute';
 import levelShapeSelection from "./routes/levelShapeSelectionRoute";
 import {connectToDatabase} from "./db/db";
 import dotenv from "dotenv";
-
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from "../swagger";
+import roundRoutes from "./routes/roundRoutes";
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 dotenv.config();
 
 app.use('/api', apiKeyMiddleware); // Проверка API-ключа для всех маршрутов под /api
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 // Middleware
@@ -38,6 +41,8 @@ app.use('api/levelShapeSelection', levelShapeSelection);
 
 //rebus level route
 app.use('/api/levelRebus', levelRebusRoute); // Add API prefix for routes
+
+app.use('/api/rounds', roundRoutes);
 
 //one try
 const insertInitialData = async () => {

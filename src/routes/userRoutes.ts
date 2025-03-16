@@ -14,8 +14,31 @@ import {
 } from '../controllers/userController';
 
 const router = Router();
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: Управление пользователями
+ */
 
-// Define routes
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Получить всех пользователей
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Список пользователей
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Ошибка сервера
+ */
 router.get('/users', getUsers); // Route to get all levels
 
 //create user
@@ -34,7 +57,7 @@ router.post('/findUserByEmail', findUserByEmail);
 router.post('/findUserByPhone', findUserByPhone);
 
 //addCompletedTasks
-router.post('/user/:id/addCompleteExercise/', addCompleteExercise);
+router.post('/user/:id/addCompleteExercise/:roundId', addCompleteExercise);
 //addIncompleteTasks
 router.post('/user/:id/addIncompleteExercise/', addIncompleteExercise);
 //removeFromIncompleteTasks
