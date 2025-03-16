@@ -12,7 +12,7 @@ const ProgressSchema = new Schema({
     incompleteExercises: [
         {
             exerciseId: { type: Number, required: true, },
-            progress: { type: Number, default: 0 }, // Процент выполнения (0-100)
+            progress: { type: Number, default: 0 }, // Completion percentage (0-100)
         },
     ],
     totalScore: { type: Number, default: 0 },

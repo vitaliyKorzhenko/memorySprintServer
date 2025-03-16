@@ -1,13 +1,13 @@
 import pool from "../config/db";
 
-// Массив с пользователями для вставки
+// Array of users to insert
 const users = [
   { email: 'vitaliykorzenkoua@gmail.com', phone: '+380669947651', age: '30', isActive: true },
   { email: 'vitaliykorzhenkouapr@gmail.com', phone: '+380669947651', age: '30', isActive: false },
-  // Добавьте других пользователей
+  // Add user data here
 ];
 
-// Функция для вставки пользователей в базу данных
+// Function to insert users into the database
 const seedUsers = async () => {
   try {
     for (const user of users) {
@@ -21,9 +21,9 @@ const seedUsers = async () => {
       console.log(`User ${user.email} added successfully`);
     }
   } catch (error) {
-    console.error('Error inserting users:', error);
+    console.error('Error seeding users:', error);
   }
 };
 
-// Экспортируем функцию для использования в других файлах
+// Export function for use in other files
 export default seedUsers;
