@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'; // Импортируем типы
+import { Request, Response } from 'express'; // Import types
 import pool from '../config/db';
 
 const tablePackage = 'packages';

@@ -1,3 +1,8 @@
+/**
+ * User Routes Configuration
+ * Handles all routes related to user management and user progress
+ */
+
 import { Router } from 'express';
 import {
     createUser,
@@ -10,64 +15,134 @@ import {
     addIncompleteExercise,
     removeIncompleteExercise,
     getCompletedExercises,
-    getIncompleteExerciseById, getIncompleteExercises
+    getIncompleteExerciseById,
+    getIncompleteExercises
 } from '../controllers/userController';
 
 const router = Router();
+
 /**
  * @swagger
  * tags:
  *   name: Users
- *   description: Управление пользователями
+ *   description: User management endpoints
  */
 
 /**
  * @swagger
- * /users:
+ * /api/users:
  *   get:
- *     summary: Получить всех пользователей
+ *     summary: Get all users
  *     tags: [Users]
  *     responses:
  *       200:
- *         description: Список пользователей
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
+ *         description: List of users
  *       500:
- *         description: Ошибка сервера
+ *         description: Server error
  */
-router.get('/users', getUsers); // Route to get all levels
+router.get('/users', getUsers);
 
-//create user
+/**
+ * @swagger
+ * /api/createUser:
+ *   post:
+ *     summary: Create a new user
+ *     tags: [Users]
+ */
 router.post('/createUser', createUser);
 
-//disable user by id
+/**
+ * @swagger
+ * /api/disableUser:
+ *   post:
+ *     summary: Disable user account
+ *     tags: [Users]
+ */
 router.post('/disableUser', disableUser);
 
-//enable user by id
+/**
+ * @swagger
+ * /api/enableUser:
+ *   post:
+ *     summary: Enable user account
+ *     tags: [Users]
+ */
 router.post('/enableUser', enableUser);
 
-//findUserByEmail
+/**
+ * @swagger
+ * /api/findUserByEmail:
+ *   post:
+ *     summary: Find user by email address
+ *     tags: [Users]
+ */
 router.post('/findUserByEmail', findUserByEmail);
 
-//findUserByPhone
+/**
+ * @swagger
+ * /api/findUserByPhone:
+ *   post:
+ *     summary: Find user by phone number
+ *     tags: [Users]
+ */
 router.post('/findUserByPhone', findUserByPhone);
 
-//addCompletedTasks
-router.post('/user/:id/addCompleteExercise/:roundId', addCompleteExercise);
-//addIncompleteTasks
-router.post('/user/:id/addIncompleteExercise/', addIncompleteExercise);
-//removeFromIncompleteTasks
-router.delete('/user/:id/removeIncompleteExercise/:exerciseId', removeIncompleteExercise);
-//getCompletedTasks
-router.get("/user/:id/completed", getCompletedExercises);
-//get incomplete tasks by id
-router.get("/user/:id/incomplete/:exerciseId", getIncompleteExerciseById);
-//get incomplete tasks
-router.get("/user/:id/incomplete", getIncompleteExercises);
+/**
+ * Exercise Progress Routes
+ */
 
+/**
+ * @swagger
+ * /api/user/{id}/addCompleteExercise/{roundId}:
+ *   post:
+ *     summary: Add completed exercise to user's progress
+ *     tags: [User Progress]
+ */
+router.post('/user/:id/addCompleteExercise/:roundId', addCompleteExercise);
+
+/**
+ * @swagger
+ * /api/user/{id}/addIncompleteExercise:
+ *   post:
+ *     summary: Add incomplete exercise to user's progress
+ *     tags: [User Progress]
+ */
+router.post('/user/:id/addIncompleteExercise', addIncompleteExercise);
+
+/**
+ * @swagger
+ * /api/user/{id}/removeIncompleteExercise/{exerciseId}:
+ *   delete:
+ *     summary: Remove incomplete exercise from user's progress
+ *     tags: [User Progress]
+ */
+router.delete('/user/:id/removeIncompleteExercise/:exerciseId', removeIncompleteExercise);
+
+/**
+ * @swagger
+ * /api/user/{id}/completed:
+ *   get:
+ *     summary: Get user's completed exercises
+ *     tags: [User Progress]
+ */
+router.get('/user/:id/completed', getCompletedExercises);
+
+/**
+ * @swagger
+ * /api/user/{id}/incomplete/{exerciseId}:
+ *   get:
+ *     summary: Get specific incomplete exercise
+ *     tags: [User Progress]
+ */
+router.get('/user/:id/incomplete/:exerciseId', getIncompleteExerciseById);
+
+/**
+ * @swagger
+ * /api/user/{id}/incomplete:
+ *   get:
+ *     summary: Get all incomplete exercises
+ *     tags: [User Progress]
+ */
+router.get('/user/:id/incomplete', getIncompleteExercises);
 
 export default router;

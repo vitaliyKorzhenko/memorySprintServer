@@ -1,8 +1,14 @@
+/**
+ * Round Controller
+ * Handles all round-related operations
+ */
+
 import Round from "../models/round.model";
 import { Request, Response } from 'express';
 
-//Получить все раунды
-
+/**
+ * Get all rounds
+ */
 export const getAllRounds = async (req: Request, res: Response) => {
     try {
         const rounds = await Round.find();
@@ -13,7 +19,9 @@ export const getAllRounds = async (req: Request, res: Response) => {
     }
 }
 
-// Получить раунды по типу
+/**
+ * Get rounds by type
+ */
 export const getRoundsByType = async (req: Request, res: Response) => {
     try {
         const { type } = req.params;
@@ -26,7 +34,9 @@ export const getRoundsByType = async (req: Request, res: Response) => {
     }
 };
 
-//Получить раунды по сложности
+/**
+ * Get rounds by complexity
+ */
 export const getRoundsByComplexity = async (req: Request, res: Response) => {
     try {
         const { complexity } = req.params;
@@ -37,7 +47,9 @@ export const getRoundsByComplexity = async (req: Request, res: Response) => {
     }
 };
 
-// Генерация раундов с разными типами
+/**
+ * Generate rounds with different types
+ */
 export const generateRounds = async (req: Request, res: Response) => {
     try {
         const { complexity } = req.params;
@@ -51,7 +63,9 @@ export const generateRounds = async (req: Request, res: Response) => {
     }
 };
 
-// Получить раунд по ID
+/**
+ * Get round by ID
+ */
 export const getRoundById = async (req: Request, res: Response)=> {
     try {
         const { id } = req.params;
@@ -66,7 +80,9 @@ export const getRoundById = async (req: Request, res: Response)=> {
     }
 };
 
-// Получить правильный ответ для раунда по ID
+/**
+ * Get correct answer for round by ID
+ */
 export const getCorrectAnswer = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;

@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -104,29 +95,27 @@ exports.levels14Plus = [
         // Correct answer for the sequence
     }
 ];
-function insertLevels() {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const level of exports.levels14Plus) {
-            try {
-                const query = `
+async function insertLevels() {
+    for (const level of exports.levels14Plus) {
+        try {
+            const query = `
         INSERT INTO levels (number, type, mode, hint, "isActive", answer)
         VALUES ($1, $2, $3, $4, $5, $6)
       `;
-                const values = [
-                    level.id,
-                    level.type,
-                    level.mode,
-                    level.hint,
-                    true,
-                    0
-                ];
-                yield db_1.default.query(query, values);
-                console.log(`Inserted level with id ${level.id}`);
-            }
-            catch (error) {
-                console.error(`Error inserting level with id ${level.id}:`, error);
-            }
+            const values = [
+                level.id,
+                level.type,
+                level.mode,
+                level.hint,
+                true,
+                0
+            ];
+            await db_1.default.query(query, values);
+            console.log(`Inserted level with id ${level.id}`);
         }
-    });
+        catch (error) {
+            console.error(`Error inserting level with id ${level.id}:`, error);
+        }
+    }
 }
 exports.default = insertLevels;

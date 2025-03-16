@@ -1,14 +1,5 @@
 "use strict";
 //work with table level_number_sequence
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -16,19 +7,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.findById = exports.createLevel = exports.getLevels = void 0;
 const db_1 = __importDefault(require("../config/db"));
 //getl all levels
-const getLevels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getLevels = async (req, res) => {
     try {
-        const allLevels = yield db_1.default.query("SELECT * FROM number_grid_33");
+        const allLevels = await db_1.default.query("SELECT * FROM number_grid_33");
         res.status(200).json(allLevels.rows);
     }
     catch (err) {
         console.error(err);
         res.status(500).json({ message: "error retrieving levels" });
     }
-});
+};
 exports.getLevels = getLevels;
 //create new level
-const createLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createLevel = async (req, res) => {
     const { sequence, answer, options } = req.body;
     try {
         if (!sequence) {
@@ -59,7 +50,7 @@ const createLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         let hint_sp = req.body.hintSP ? req.body.hintSP : "";
         //complexity
         let complexity = req.body.complexity ? req.body.complexity : "medium";
-        let newLevel = yield db_1.default.query("INSERT INTO number_grid_33 (sequence, answer, options, points, header_ua, header_en, header_sp, hint_ua, hint_en, hint_sp, complexity) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *", [
+        let newLevel = await db_1.default.query("INSERT INTO number_grid_33 (sequence, answer, options, points, header_ua, header_en, header_sp, hint_ua, hint_en, hint_sp, complexity) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *", [
             currentSequence,
             answer,
             currentOptions,
@@ -80,22 +71,22 @@ const createLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         console.error(err);
         res.status(500).json({ message: "create error" });
     }
-});
+};
 exports.createLevel = createLevel;
 //find by id
-const findById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const findById = async (req, res) => {
     const { id } = req.body;
     try {
         if (!id) {
             res.status(400).json({ message: "id is required" });
             return;
         }
-        const level = yield db_1.default.query("SELECT * FROM number_grid_33 WHERE id = $1", [id]);
+        const level = await db_1.default.query("SELECT * FROM number_grid_33 WHERE id = $1", [id]);
         res.status(200).json(level.rows[0]);
     }
     catch (err) {
         console.error(err);
         res.status(500).json({ message: "error retrieving level" });
     }
-});
+};
 exports.findById = findById;

@@ -11,7 +11,7 @@ export const levels14Plus: LevelMain[] = [
         sequence: [0, 3, 8, 15],          // Example sequence
         answer: 24,  
         options: ['24', '18', '21', '36'],
-        mode: LevelMode.VARIANTS                         // Правильный ответ для последовательности
+        mode: LevelMode.VARIANTS                         // Correct answer for the sequence
         // Correct answer for the sequence
       } as NumberSequenceLevel,
        {
@@ -21,9 +21,9 @@ export const levels14Plus: LevelMain[] = [
         mode: LevelMode.VARIANTS,
         rebus: {
           lines: [
-            { shapes: [{ type: 'circle', count: 2 }, { type: 'triangle', count: 1 }], result: 3 }, // 2 круга + 1 треугольник = 3
-            { shapes: [{ type: 'square', count: 1 }, { type: 'circle', count: 1 }], result: 6 },   // 1 квадрат + 1 круг = 2
-            { shapes: [{ type: 'circle', count: 3 }], result: 3 }                                // 3 круга = 3
+            { shapes: [{ type: 'circle', count: 2 }, { type: 'triangle', count: 1 }], result: 3 }, // 2 circles + 1 triangle = 3
+            { shapes: [{ type: 'square', count: 1 }, { type: 'circle', count: 1 }], result: 6 },   // 1 square + 1 circle = 2
+            { shapes: [{ type: 'circle', count: 3 }], result: 3 }                                // 3 circles = 3
           ]
         },
         question: 'How many circles?',
@@ -38,9 +38,9 @@ export const levels14Plus: LevelMain[] = [
         mode: LevelMode.VARIANTS,
         rebus: {
           lines: [
-            { shapes: [{ type: 'square', count: 1 }, { type: 'triangle', count: 1 }], result: 7 }, // 1 квадрат + 1 треугольник = 2
-            { shapes: [{ type: 'triangle', count: 1 }, { type: 'circle', count: 1 }], result: 7 }, // 2 треугольника + 1 круг = 3
-            { shapes: [{ type: 'square', count: 2 }, { type: 'circle', count: 3 }], result: 25 }, // 2 квадрата + 3 круга = 5
+            { shapes: [{ type: 'square', count: 1 }, { type: 'triangle', count: 1 }], result: 7 }, // 1 square + 1 triangle = 2
+            { shapes: [{ type: 'triangle', count: 1 }, { type: 'circle', count: 1 }], result: 7 }, // 2 triangles + 1 circle = 3
+            { shapes: [{ type: 'square', count: 2 }, { type: 'circle', count: 3 }], result: 25 }, // 2 squares + 3 circles = 5
 
           ]
         },
@@ -56,9 +56,9 @@ export const levels14Plus: LevelMain[] = [
         mode: LevelMode.VARIANTS,
         rebus: {
           lines: [
-            { shapes: [{ type: 'circle', count: 2 }, { type: 'square', count: 2 }], result: 18 }, // 4 круга + 3 квадрата = 7
-            { shapes: [{ type: 'triangle', count: 1 }, { type: 'circle', count: 2 }], result: 13 }, // 5 треугольников + 2 круга = 7
-            { shapes: [{ type: 'square', count: 2 }, { type: 'triangle', count: 1 }], result: 15 } // 2 квадрата + 4 треугольника = 6
+            { shapes: [{ type: 'circle', count: 2 }, { type: 'square', count: 2 }], result: 18 }, // 4 circles + 3 squares = 7
+            { shapes: [{ type: 'triangle', count: 1 }, { type: 'circle', count: 2 }], result: 13 }, // 5 triangles + 2 circles = 7
+            { shapes: [{ type: 'square', count: 2 }, { type: 'triangle', count: 1 }], result: 15 } // 2 squares + 4 triangles = 6
           ]
         },
         question: 'How many triangles?',
@@ -73,7 +73,7 @@ export const levels14Plus: LevelMain[] = [
         sequence: [3, 2, 3, 4, 3, 4, 5, 6, ''],
         answer: 24,  
         options: ['2', '3', '4', '5'],
-        mode: LevelMode.VARIANTS                         // Правильный ответ для последовательности
+        mode: LevelMode.VARIANTS                         // Correct answer for the sequence
         // Correct answer for the sequence
       } as NumberGrid33Level,
       {
@@ -85,15 +85,15 @@ export const levels14Plus: LevelMain[] = [
         mode: LevelMode.VARIANTS,
         shapes: [
       
-            { id: 1, type: 'star', color: '#FF6347', isFill: true },        // Красная звезда
-            { id: 2, type: 'heart', color: '#32CD32', isFill: true },     // Синий шестиугольник
-            { id: 3, type: 'triangle', color: '#FF6347', isFill: false },    // Зеленый пятиугольник
-            { id: 4, type: 'cross', color: '#32CD32', isFill: true },    // Золотой восьмиугольник (лишний, не закрашенный)
+            { id: 1, type: 'star', color: '#FF6347', isFill: true },        // Red star
+            { id: 2, type: 'heart', color: '#32CD32', isFill: true },     // Green heart
+            { id: 3, type: 'triangle', color: '#FF6347', isFill: false },    // Red triangle (outline)
+            { id: 4, type: 'cross', color: '#32CD32', isFill: true },     // Green cross
           
           
           
         ]
-                                 // Правильный ответ для последовательности
+                                 // Correct sequence answer
         // Correct answer for the sequence
       } as ShapeSelectionLevel
      ];

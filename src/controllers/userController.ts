@@ -1,5 +1,5 @@
 // src/controllers/userController.ts
-import { Request, Response } from 'express'; // Импортируем типы
+import { Request, Response } from 'express'; // Import types
 import User from "../models/user.model";
 import {ICompletedExercise} from "../types/user.types";
 import Round from "../models/round.model";
@@ -12,7 +12,7 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
       res.status(200).json(users);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Ошибка получения данных' });
+    res.status(500).json({ message: 'Error fetching data' });
   }
 };
 
@@ -172,7 +172,7 @@ export const findUserByPhone = async (
     }
 };
 
-// Добавление прогресса (завершение задания)
+// Adding progress (completing the task)
 export const addCompleteExercise = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id, roundId } = req.params;
@@ -195,7 +195,7 @@ export const addCompleteExercise = async (req: Request, res: Response): Promise<
         }
 
         const isExerciseExists = user.progress.completedExercises.some(
-            (ex) => ex.exerciseId === round?.id // Сравниваем числа
+            (ex) => ex.exerciseId === round?.id // Compare IDs
         );
 
 
@@ -247,7 +247,7 @@ export const addIncompleteExercise = async (req: Request, res: Response): Promis
 
         user.progress.incompleteExercises.push({
             exerciseId,
-            progress: progress || 0, // Если progress не передан, по умолчанию 0
+            progress: progress || 0, // Default to 0 if progress is not provided
         });
 
         await user.save();
